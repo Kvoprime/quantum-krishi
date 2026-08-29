@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quantum — Smart Farming Companion</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ============================= -->
+        <!-- HEADER -->
+        <!-- ============================= -->
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="logo">
+                    🌾
+                </div>
+
+                <div class="brand-info">
+                    <h1>Quantum</h1>
+
+                    <span class="status">
+                        <span class="status-dot"></span>
+                        Smart Farming Companion
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="header-actions">
+
+                <button id="language-button" class="header-button">
+                    🌐 <span>Language</span>
+                </button>
+
+                <button id="clear-button" class="header-button">
+                    ✨ <span>New Chat</span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ============================= -->
+        <!-- MAIN CHAT -->
+        <!-- ============================= -->
+
+        <main id="chat-box" class="chat-box">
+
+            <div class="welcome">
+
+                <div class="welcome-icon">
+                    🌾
+                </div>
+
+                <div class="welcome-badge">
+                    AI FOR SMARTER FARMING
+                </div>
+
+                <h2>
+                    How can Quantum help your farm?
+                </h2>
+
+                <p>
+                    Ask about crops, pests, weather, markets, farming practices,
+                    government schemes, transportation and more.
+                    You can also speak to Quantum or share a crop photo.
+                </p>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="quick-actions">
+
+                    <button class="quick-action" data-message="Help me identify a problem with my crop">
+                        <span class="quick-icon">🌱</span>
+                        <span>
+                            <strong>Crop Help</strong>
+                            <small>Identify crop problems</small>
+                        </span>
+                    </button>
+
+                    <button class="quick-action" data-message="What is the current market situation for my crop?">
+                        <span class="quick-icon">💰</span>
+                        <span>
+                            <strong>Market Intelligence</strong>
+                            <small>Prices & selling decisions</small>
+                        </span>
+                    </button>
+
+                    <button class="quick-action" data-message="What weather information should I consider for farming today?">
+                        <span class="quick-icon">🌦️</span>
+                        <span>
+                            <strong>Weather Advice</strong>
+                            <small>Weather-based farming help</small>
+                        </span>
+                    </button>
+
+                    <button class="quick-action" data-message="Help me find government schemes that may benefit a farmer">
+                        <span class="quick-icon">🏛️</span>
+                        <span>
+                            <strong>Government Schemes</strong>
+                            <small>Discover possible support</small>
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+        <!-- ============================= -->
+        <!-- INPUT AREA -->
+        <!-- ============================= -->
+
+        <footer class="input-section">
+
+            <!-- ATTACHMENT PREVIEW -->
+
+            <div id="attachment-preview" class="attachment-preview"></div>
+
+
+            <div class="input-wrapper">
+
+                <!-- IMAGE BUTTON -->
+
+                <button
+                    id="image-button"
+                    class="tool-button"
+                    type="button"
+                    title="Upload crop photo"
+                >
+                    📷
+                </button>
+
+                <input
+                    type="file"
+                    id="image-input"
+                    accept="image/*"
+                    hidden
+                >
+
+
+                <!-- TEXT INPUT -->
+
+                <textarea
+                    id="user-input"
+                    rows="1"
+                    placeholder="Ask Quantum anything about farming..."
+                    autocomplete="off"
+                ></textarea>
+
+
+                <!-- VOICE BUTTON -->
+
+                <button
+                    id="voice-button"
+                    class="tool-button voice-button"
+                    type="button"
+                    title="Talk to Quantum"
+                >
+                    🎤
+                </button>
+
+
+                <!-- SEND -->
+
+                <button
+                    id="send-button"
+                    class="send-button"
+                    type="button"
+                    title="Send message"
+                >
+                    <span>➤</span>
+                </button>
+
+            </div>
+
+
+            <div class="input-note">
+
+                <span>🎤</span>
+                Speak naturally •
+                <span>📷</span>
+                Share a crop photo •
+                <span>🌐</span>
+                Multiple languages
+
+            </div>
+
+        </footer>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- LANGUAGE MODAL -->
+    <!-- ============================= -->
+
+    <div id="language-modal" class="modal-overlay">
+
+        <div class="language-modal">
+
+            <button id="close-language" class="modal-close">
+                ✕
+            </button>
+
+            <div class="modal-icon">
+                🌐
+            </div>
+
+            <h3>Choose your language</h3>
+
+            <p>
+                Select the language you would like to use with Quantum.
+            </p>
+
+            <div class="language-grid">
+
+                <button class="language-option" data-language="English">
+                    🇬🇧
+                    <span>English</span>
+                </button>
+
+                <button class="language-option" data-language="Hindi">
+                    🇮🇳
+                    <span>हिन्दी</span>
+                </button>
+
+                <button class="language-option" data-language="Bengali">
+                    🇮🇳
+                    <span>বাংলা</span>
+                </button>
+
+                <button class="language-option" data-language="Tamil">
+                    🇮🇳
+                    <span>தமிழ்</span>
+                </button>
+
+                <button class="language-option" data-language="Telugu">
+                    🇮🇳
+                    <span>తెలుగు</span>
+                </button>
+
+                <button class="language-option" data-language="Marathi">
+                    🇮🇳
+                    <span>मराठी</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- SCRIPT -->
+    <!-- ============================= -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
