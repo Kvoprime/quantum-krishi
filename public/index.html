@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quantum Krishi — Smart Farming Companion</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =====================================================
+           PRIVATE ACCESS SCREEN
+           ===================================================== */
+
+        #access-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #173d25 0%,
+                    #0b1710 45%,
+                    #050806 100%
+                );
+
+            padding: 20px;
+        }
+
+        .access-card {
+            width: 100%;
+            max-width: 430px;
+
+            padding: 42px 34px;
+
+            border-radius: 24px;
+
+            background: rgba(18, 30, 21, 0.96);
+
+            border: 1px solid rgba(255, 255, 255, 0.10);
+
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.55);
+
+            text-align: center;
+
+            color: white;
+        }
+
+        .access-logo {
+            width: 78px;
+            height: 78px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 22px;
+
+            font-size: 40px;
+
+            background: rgba(92, 190, 112, 0.15);
+
+            border: 1px solid rgba(120, 220, 140, 0.20);
+        }
+
+        .access-card h1 {
+            margin: 0 0 8px;
+
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .access-card h1 span {
+            color: #8bd49a;
+        }
+
+        .access-card p {
+            margin: 0 auto 28px;
+
+            max-width: 330px;
+
+            line-height: 1.6;
+
+            color: rgba(255, 255, 255, 0.68);
+        }
+
+        .access-label {
+            display: block;
+
+            text-align: left;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        #access-code {
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 15px 16px;
+
+            border-radius: 13px;
+
+            border: 1px solid rgba(255, 255, 255, 0.14);
+
+            outline: none;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            color: white;
+
+            font-size: 16px;
+
+            margin-bottom: 14px;
+        }
+
+        #access-code:focus {
+            border-color: #78c98a;
+
+            box-shadow:
+                0 0 0 3px rgba(120, 201, 138, 0.12);
+        }
+
+        #access-code::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        #access-button {
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                #65c47b,
+                #3f9d58
+            );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        #access-button:hover {
+            transform: translateY(-1px);
+
+            filter: brightness(1.08);
+        }
+
+        #access-button:disabled {
+            opacity: 0.65;
+
+            cursor: wait;
+
+            transform: none;
+        }
+
+        #access-error {
+            min-height: 22px;
+
+            margin-top: 13px;
+
+            font-size: 14px;
+
+            color: #ff8f8f;
+        }
+
+        .access-footer {
+            margin-top: 25px;
+
+            font-size: 12px;
+
+            color: rgba(255, 255, 255, 0.40);
+        }
+
+
+        /* =====================================================
+           HIDE CHAT UNTIL ACCESS IS VERIFIED
+           ===================================================== */
+
+        body.private-locked .app {
+            display: none !important;
+        }
+
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 480px) {
+
+            .access-card {
+                padding: 32px 22px;
+            }
+
+            .access-card h1 {
+                font-size: 26px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body class="private-locked">
+
+
+    <!-- =====================================================
+         PRIVATE ACCESS SCREEN
+         ===================================================== -->
+
+    <div id="access-screen">
+
+        <div class="access-card">
+
+            <div class="access-logo">
+                🌾
+            </div>
+
+            <h1>
+                Quantum <span>Krishi</span>
+            </h1>
+
+            <p>
+                Private demonstration access.
+                Enter the access code provided by the Quantum Krishi team.
+            </p>
+
+
+            <label
+                class="access-label"
+                for="access-code"
+            >
+                ACCESS CODE
+            </label>
+
+
+            <input
+                id="access-code"
+                type="password"
+                placeholder="Enter access code"
+                autocomplete="off"
+                spellcheck="false"
+            >
+
+
+            <button
+                id="access-button"
+                type="button"
+            >
+                🔓 Enter Quantum Krishi
+            </button>
+
+
+            <div id="access-error"></div>
+
+
+            <div class="access-footer">
+                🌱 Smart Farming Companion
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAIN APPLICATION
+         ===================================================== -->
+
+    <div class="app">
+
+        <!-- ============================= -->
+        <!-- HEADER -->
+        <!-- ============================= -->
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="logo">
+                    🌾
+                </div>
+
+                <div class="brand-info">
+
+                    <h1>
+                        Quantum
+                    </h1>
+
+                    <span class="status">
+
+                        <span class="status-dot"></span>
+
+                        Smart Farming Companion
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <button
+                    id="language-button"
+                    class="header-button"
+                    type="button"
+                >
+                    🌐 <span>Language</span>
+                </button>
+
+
+                <button
+                    id="clear-button"
+                    class="header-button"
+                    type="button"
+                >
+                    ✨ <span>New Chat</span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ============================= -->
+        <!-- MAIN CHAT -->
+        <!-- ============================= -->
+
+        <main
+            id="chat-box"
+            class="chat-box"
+        >
+
+            <div class="welcome">
+
+                <div class="welcome-icon">
+                    🌾
+                </div>
+
+
+                <div class="welcome-badge">
+                    AI FOR SMARTER FARMING
+                </div>
+
+
+                <h2>
+                    How can Quantum help your farm?
+                </h2>
+
+
+                <p>
+
+                    Ask about crops, pests, weather, markets,
+                    farming practices, government schemes,
+                    transportation and more.
+
+                    You can also speak to Quantum
+                    or share a crop photo.
+
+                </p>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="quick-actions">
+
+
+                    <button
+                        class="quick-action"
+                        data-message="Help me identify a problem with my crop"
+                        type="button"
+                    >
+
+                        <span class="quick-icon">
+                            🌱
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Crop Help
+                            </strong>
+
+                            <small>
+                                Identify crop problems
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        class="quick-action"
+                        data-message="I want to sell my crop and need help creating a marketplace listing"
+                        type="button"
+                    >
+
+                        <span class="quick-icon">
+                            💰
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Sell Produce
+                            </strong>
+
+                            <small>
+                                Create a marketplace listing
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        class="quick-action"
+                        data-message="What weather information should I consider for farming today?"
+                        type="button"
+                    >
+
+                        <span class="quick-icon">
+                            🌦️
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Weather Advice
+                            </strong>
+
+                            <small>
+                                Weather-based farming help
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        class="quick-action"
+                        data-message="Help me find government schemes that may benefit a farmer"
+                        type="button"
+                    >
+
+                        <span class="quick-icon">
+                            🏛️
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Government Schemes
+                            </strong>
+
+                            <small>
+                                Discover possible support
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+
+        <!-- ============================= -->
+        <!-- INPUT AREA -->
+        <!-- ============================= -->
+
+        <footer class="input-section">
+
+
+            <!-- ATTACHMENT PREVIEW -->
+
+            <div
+                id="attachment-preview"
+                class="attachment-preview"
+            ></div>
+
+
+
+            <div class="input-wrapper">
+
+
+                <!-- IMAGE BUTTON -->
+
+                <button
+                    id="image-button"
+                    class="tool-button"
+                    type="button"
+                    title="Upload crop photo"
+                >
+                    📷
+                </button>
+
+
+                <input
+                    type="file"
+                    id="image-input"
+                    accept="image/*"
+                    hidden
+                >
+
+
+
+                <!-- TEXT INPUT -->
+
+                <textarea
+                    id="user-input"
+                    rows="1"
+                    placeholder="Ask Quantum anything about farming..."
+                    autocomplete="off"
+                ></textarea>
+
+
+
+                <!-- VOICE BUTTON -->
+
+                <button
+                    id="voice-button"
+                    class="tool-button voice-button"
+                    type="button"
+                    title="Talk to Quantum"
+                >
+                    🎤
+                </button>
+
+
+
+                <!-- SEND -->
+
+                <button
+                    id="send-button"
+                    class="send-button"
+                    type="button"
+                    title="Send message"
+                >
+
+                    <span>
+                        ➤
+                    </span>
+
+                </button>
+
+
+            </div>
+
+
+
+            <div class="input-note">
+
+                <span>🎤</span>
+                Speak naturally •
+
+                <span>📷</span>
+                Share a crop photo •
+
+                <span>🌐</span>
+                Multiple languages
+
+            </div>
+
+
+        </footer>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         LANGUAGE MODAL
+         ===================================================== -->
+
+    <div
+        id="language-modal"
+        class="modal-overlay"
+    >
+
+        <div class="language-modal">
+
+
+            <button
+                id="close-language"
+                class="modal-close"
+                type="button"
+            >
+                ✕
+            </button>
+
+
+            <div class="modal-icon">
+                🌐
+            </div>
+
+
+            <h3>
+                Choose your language
+            </h3>
+
+
+            <p>
+                Select the language you would like
+                to use with Quantum.
+            </p>
+
+
+
+            <div class="language-grid">
+
+
+                <button
+                    class="language-option"
+                    data-language="English"
+                    type="button"
+                >
+                    🇬🇧
+                    <span>English</span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    data-language="Hindi"
+                    type="button"
+                >
+                    🇮🇳
+                    <span>हिन्दी</span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    data-language="Bengali"
+                    type="button"
+                >
+                    🇮🇳
+                    <span>বাংলা</span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    data-language="Tamil"
+                    type="button"
+                >
+                    🇮🇳
+                    <span>தமிழ்</span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    data-language="Telugu"
+                    type="button"
+                >
+                    🇮🇳
+                    <span>తెలుగు</span>
+                </button>
+
+
+                <button
+                    class="language-option"
+                    data-language="Marathi"
+                    type="button"
+                >
+                    🇮🇳
+                    <span>मराठी</span>
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PRIVATE ACCESS SCRIPT
+         ===================================================== -->
+
+    <script>
+
+        (function () {
+
+            const accessScreen =
+                document.getElementById("access-screen");
+
+            const accessCode =
+                document.getElementById("access-code");
+
+            const accessButton =
+                document.getElementById("access-button");
+
+            const accessError =
+                document.getElementById("access-error");
+
+
+            // -------------------------------------------------
+            // CHECK FOR EXISTING TOKEN
+            // -------------------------------------------------
+
+            const savedToken =
+                sessionStorage.getItem(
+                    "quantum_access_token"
+                );
+
+
+            if (savedToken) {
+
+                unlockApplication();
+
+            }
+
+
+            // -------------------------------------------------
+            // UNLOCK
+            // -------------------------------------------------
+
+            function unlockApplication() {
+
+                document.body.classList.remove(
+                    "private-locked"
+                );
+
+                accessScreen.style.display =
+                    "none";
+
+            }
+
+
+            // -------------------------------------------------
+            // VERIFY ACCESS
+            // -------------------------------------------------
+
+            async function verifyAccess() {
+
+                const code =
+                    accessCode.value.trim();
+
+
+                if (!code) {
+
+                    accessError.textContent =
+                        "Please enter the access code.";
+
+                    accessCode.focus();
+
+                    return;
+
+                }
+
+
+                accessButton.disabled =
+                    true;
+
+                accessButton.textContent =
+                    "Checking access...";
+
+
+                accessError.textContent =
+                    "";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/verify-access",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        code: code
+
+                                    })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        response.ok &&
+                        data.success &&
+                        data.token
+                    ) {
+
+                        sessionStorage.setItem(
+                            "quantum_access_token",
+                            data.token
+                        );
+
+
+                        unlockApplication();
+
+
+                    } else {
+
+                        accessError.textContent =
+                            data.message ||
+                            "Incorrect access code.";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Access verification error:",
+                        error
+                    );
+
+
+                    accessError.textContent =
+                        "Could not connect to Quantum Krishi. Please try again.";
+
+                }
+
+
+                accessButton.disabled =
+                    false;
+
+                accessButton.textContent =
+                    "🔓 Enter Quantum Krishi";
+
+            }
+
+
+
+            // -------------------------------------------------
+            // BUTTON
+            // -------------------------------------------------
+
+            accessButton.addEventListener(
+                "click",
+                verifyAccess
+            );
+
+
+            // -------------------------------------------------
+            // ENTER KEY
+            // -------------------------------------------------
+
+            accessCode.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (
+                        event.key === "Enter"
+                    ) {
+
+                        event.preventDefault();
+
+                        verifyAccess();
+
+                    }
+
+                }
+            );
+
+
+        })();
+
+    </script>
+
+
+
+    <!-- =====================================================
+         AUTHENTICATED FETCH PATCH
+         ===================================================== -->
+
+    <script>
+
+        (function () {
+
+            const originalFetch =
+                window.fetch;
+
+
+            window.fetch =
+                function (url, options = {}) {
+
+                    const token =
+                        sessionStorage.getItem(
+                            "quantum_access_token"
+                        );
+
+
+                    if (
+                        token &&
+                        (
+                            url === "/chat" ||
+                            url === "/clear-chat"
+                        )
+                    ) {
+
+                        options.headers =
+                            options.headers || {};
+
+
+                        if (
+                            options.headers instanceof Headers
+                        ) {
+
+                            options.headers.set(
+                                "x-quantum-access",
+                                token
+                            );
+
+                        } else {
+
+                            options.headers[
+                                "x-quantum-access"
+                            ] = token;
+
+                        }
+
+                    }
+
+
+                    return originalFetch(
+                        url,
+                        options
+                    );
+
+                };
+
+        })();
+
+    </script>
+
+
+
+    <!-- =====================================================
+         EXISTING QUANTUM JAVASCRIPT
+         ===================================================== -->
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
