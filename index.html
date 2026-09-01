@@ -272,6 +272,216 @@
     <!-- ============================= -->
 
     <script src="script.js"></script>
+    <!-- =====================================================
+     QUANTUM KRISHI ADVANCED DASHBOARD
+===================================================== -->
+
+<div id="quantum-dashboard" class="quantum-dashboard">
+
+    <div class="dashboard-header">
+
+        <div>
+            <div class="dashboard-eyebrow">
+                QUANTUM KRISHI • FARMER CENTER
+            </div>
+
+            <h2>🌾 Farmer Dashboard</h2>
+
+            <p>
+                Manage your crops, marketplace listings and
+                estimated earnings from one place.
+            </p>
+        </div>
+
+        <button
+            id="close-dashboard"
+            class="dashboard-close"
+            type="button"
+        >
+            ✕
+        </button>
+
+    </div>
+
+
+    <!-- STAT CARDS -->
+
+    <div class="dashboard-stats">
+
+        <div class="dashboard-stat">
+
+            <span class="dashboard-stat-icon">
+                🌾
+            </span>
+
+            <div>
+                <small>Active Listings</small>
+
+                <strong id="dashboard-listings">
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat">
+
+            <span class="dashboard-stat-icon">
+                📦
+            </span>
+
+            <div>
+                <small>Total Produce</small>
+
+                <strong id="dashboard-quantity">
+                    0 kg
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat">
+
+            <span class="dashboard-stat-icon">
+                💰
+            </span>
+
+            <div>
+                <small>Estimated Value</small>
+
+                <strong id="dashboard-value">
+                    ₹0
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat">
+
+            <span class="dashboard-stat-icon">
+                🌱
+            </span>
+
+            <div>
+                <small>Crops</small>
+
+                <strong id="dashboard-crops">
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD CONTENT -->
+
+    <div class="dashboard-content">
+
+        <section class="dashboard-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="panel-kicker">
+                        MARKETPLACE
+                    </span>
+
+                    <h3>Your Produce Listings</h3>
+                </div>
+
+                <button
+                    id="refresh-listings"
+                    class="panel-refresh"
+                    type="button"
+                >
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <div
+                id="dashboard-listing-container"
+                class="dashboard-listings-container"
+            >
+
+                <div class="dashboard-empty">
+
+                    <div class="dashboard-empty-icon">
+                        🌾
+                    </div>
+
+                    <h4>No listings yet</h4>
+
+                    <p>
+                        Your confirmed marketplace listings
+                        will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="dashboard-panel dashboard-memory-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="panel-kicker">
+                        FARMER PROFILE
+                    </span>
+
+                    <h3>Quantum Memory</h3>
+                </div>
+
+            </div>
+
+
+            <div class="memory-grid">
+
+                <div class="memory-item">
+                    <span>👤 Name</span>
+                    <strong id="memory-name">
+                        Not available
+                    </strong>
+                </div>
+
+                <div class="memory-item">
+                    <span>📍 Location</span>
+                    <strong id="memory-location">
+                        Not available
+                    </strong>
+                </div>
+
+                <div class="memory-item">
+                    <span>🌱 Crops</span>
+                    <strong id="memory-crops">
+                        Not available
+                    </strong>
+                </div>
+
+                <div class="memory-item">
+                    <span>📦 Quantity</span>
+                    <strong id="memory-quantity">
+                        Not available
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
 
 </body>
 

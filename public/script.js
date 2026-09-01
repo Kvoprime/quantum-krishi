@@ -1639,7 +1639,6 @@ function removeImage() {
 
 }
 
-
 // =====================================================
 // VOICE RECOGNITION
 // =====================================================
@@ -1648,6 +1647,83 @@ const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+let microphoneStream = null;
+
+
+// -----------------------------------------------------
+// GET MICROPHONE PERMISSION
+// -----------------------------------------------------
+
+async function requestMicrophonePermission() {
+
+    if (!navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia) {
+
+        throw new Error(
+            "Microphone access is not supported by this browser."
+        );
+
+    }
+
+    try {
+
+        microphoneStream =
+            await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
+
+        console.log(
+            "🎤 Microphone permission granted."
+        );
+
+        // We only use getUserMedia to confirm access.
+        // SpeechRecognition handles the actual speech input.
+
+        microphoneStream
+            .getTracks()
+            .forEach(track => track.stop());
+
+        microphoneStream = null;
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "🎤 Microphone permission error:",
+            error
+        );
+
+        if (error.name === "NotAllowedError") {
+
+            alert(
+                "Microphone permission was denied. Please click the microphone icon in Chrome's address bar and choose Allow."
+            );
+
+        } else if (error.name === "NotFoundError") {
+
+            alert(
+                "No microphone was found. Please connect or enable a microphone and try again."
+            );
+
+        } else {
+
+            alert(
+                "Quantum could not access your microphone."
+            );
+
+        }
+
+        return false;
+
+    }
+
+}
+
+
+// -----------------------------------------------------
+// CREATE SPEECH RECOGNITION
+// -----------------------------------------------------
 
 if (
     SpeechRecognition &&
@@ -1658,8 +1734,12 @@ if (
         new SpeechRecognition();
 
 
+    // IMPORTANT:
+    // false is more reliable than continuous mode
+    // for browser microphone recognition.
+
     recognition.continuous =
-        true;
+        false;
 
 
     recognition.interimResults =
@@ -1670,8 +1750,23 @@ if (
         1;
 
 
+    recognition.lang =
+        getSpeechLanguage(
+            selectedLanguage
+        );
+
+
+    // -------------------------------------------------
+    // START
+    // -------------------------------------------------
+
     recognition.onstart =
         function() {
+
+            console.log(
+                "🎤 Quantum voice recognition started."
+            );
+
 
             isListening =
                 true;
@@ -1700,10 +1795,20 @@ if (
         };
 
 
+    // -------------------------------------------------
+    // RESULT
+    // -------------------------------------------------
+
     recognition.onresult =
         function(event) {
 
-            let interimTranscript =
+            console.log(
+                "🎤 Speech result received:",
+                event
+            );
+
+
+            let transcript =
                 "";
 
 
@@ -1713,63 +1818,56 @@ if (
                 i++
             ) {
 
-                const transcript =
-                    event.results[i][0]
-                        .transcript;
+                const result =
+                    event.results[i];
+
+
+                const text =
+                    result[0].transcript;
+
+
+                transcript +=
+                    text;
 
 
                 if (
-                    event.results[i].isFinal
+                    result.isFinal
                 ) {
 
                     finalTranscript +=
-                        transcript + " ";
-
-                } else {
-
-                    interimTranscript +=
-                        transcript;
+                        text + " ";
 
                 }
 
             }
 
 
-            input.value =
-                finalTranscript +
-                interimTranscript;
+            // Show the recognized speech immediately.
+
+            const currentText =
+                (
+                    finalTranscript +
+                    transcript
+                ).trim();
 
 
-            input.dispatchEvent(
-                new Event("input")
-            );
+            if (currentText !== "") {
+
+                input.value =
+                    currentText;
 
 
-            input.focus();
-
-        };
-
-
-    recognition.onerror =
-        function(event) {
-
-            console.error(
-                "Speech recognition error:",
-                event.error
-            );
+                input.dispatchEvent(
+                    new Event("input")
+                );
 
 
-            if (
-                event.error ===
-                "not-allowed"
-            ) {
-
-                shouldKeepListening =
-                    false;
+                input.focus();
 
 
-                alert(
-                    "Microphone permission was denied. Please allow microphone access in Chrome."
+                console.log(
+                    "📝 Recognized text:",
+                    currentText
                 );
 
             }
@@ -1777,8 +1875,115 @@ if (
         };
 
 
+    // -------------------------------------------------
+    // ERROR
+    // -------------------------------------------------
+
+    recognition.onerror =
+        function(event) {
+
+            console.error(
+                "🎤 Speech recognition error:",
+                event.error
+            );
+
+
+            isListening =
+                false;
+
+
+            voiceButton.classList.remove(
+                "listening"
+            );
+
+
+            voiceButton.textContent =
+                "🎤";
+
+
+            input.placeholder =
+                `Ask Quantum in ${selectedLanguage}...`;
+
+
+            shouldKeepListening =
+                false;
+
+
+            if (
+                event.error ===
+                "not-allowed"
+            ) {
+
+                alert(
+                    "Quantum does not have microphone permission. Please allow microphone access for this site in Chrome."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                event.error ===
+                "audio-capture"
+            ) {
+
+                alert(
+                    "Quantum cannot access your microphone. Please check that your microphone is connected and not being used exclusively by another application."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                event.error ===
+                "no-speech"
+            ) {
+
+                console.log(
+                    "🎤 No speech detected."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                event.error ===
+                "network"
+            ) {
+
+                alert(
+                    "Speech recognition could not connect. Please check your internet connection."
+                );
+
+                return;
+
+            }
+
+
+            console.warn(
+                "Unhandled speech recognition error:",
+                event.error
+            );
+
+        };
+
+
+    // -------------------------------------------------
+    // END
+    // -------------------------------------------------
+
     recognition.onend =
         function() {
+
+            console.log(
+                "🎤 Quantum voice recognition ended."
+            );
+
 
             isListening =
                 false;
@@ -1801,6 +2006,12 @@ if (
                 finalTranscript.trim();
 
 
+            console.log(
+                "📝 Final voice message:",
+                message
+            );
+
+
             if (
                 message !== "" &&
                 shouldKeepListening
@@ -1818,7 +2029,7 @@ if (
                         );
 
                     },
-                    200
+                    300
                 );
 
             }
@@ -1826,9 +2037,22 @@ if (
         };
 
 
+    // -------------------------------------------------
+    // VOICE BUTTON
+    // -------------------------------------------------
+
     voiceButton.addEventListener(
         "click",
-        function() {
+        async function() {
+
+            console.log(
+                "🎤 Voice button clicked."
+            );
+
+
+            // -----------------------------------------
+            // STOP LISTENING
+            // -----------------------------------------
 
             if (isListening) {
 
@@ -1836,8 +2060,18 @@ if (
                     true;
 
 
-                recognition.stop();
+                try {
 
+                    recognition.stop();
+
+                } catch (error) {
+
+                    console.error(
+                        "Could not stop recognition:",
+                        error
+                    );
+
+                }
 
                 return;
 
@@ -1855,11 +2089,43 @@ if (
                 true;
 
 
+            // -----------------------------------------
+            // CHECK MICROPHONE FIRST
+            // -----------------------------------------
+
+            const microphoneReady =
+                await requestMicrophonePermission();
+
+
+            if (!microphoneReady) {
+
+                shouldKeepListening =
+                    false;
+
+                return;
+
+            }
+
+
+            // -----------------------------------------
+            // SET LANGUAGE
+            // -----------------------------------------
+
             recognition.lang =
                 getSpeechLanguage(
                     selectedLanguage
                 );
 
+
+            console.log(
+                "🌐 Recognition language:",
+                recognition.lang
+            );
+
+
+            // -----------------------------------------
+            // START RECOGNITION
+            // -----------------------------------------
 
             try {
 
@@ -1868,9 +2134,39 @@ if (
             } catch (error) {
 
                 console.error(
-                    "Could not start microphone:",
+                    "🎤 Could not start recognition:",
                     error
                 );
+
+                // Chrome can throw InvalidStateError
+                // if start() is called too quickly.
+
+                if (
+                    error.name ===
+                    "InvalidStateError"
+                ) {
+
+                    setTimeout(
+                        function() {
+
+                            try {
+
+                                recognition.start();
+
+                            } catch (retryError) {
+
+                                console.error(
+                                    "🎤 Retry failed:",
+                                    retryError
+                                );
+
+                            }
+
+                        },
+                        500
+                    );
+
+                }
 
             }
 
@@ -1929,8 +2225,6 @@ function getSpeechLanguage(language) {
     );
 
 }
-
-
 // =====================================================
 // TEXT TO SPEECH
 // =====================================================
