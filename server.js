@@ -715,7 +715,7 @@ analyze only visible evidence and clearly state uncertainty.
         await ai.models.generateContent({
 
             model:
-                "gemini-3.5-flash",
+                "gemini-3.5-flash-lite",
 
             contents: [
 
